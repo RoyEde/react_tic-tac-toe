@@ -18,9 +18,12 @@ export default class extends Component {
   componentWillReceiveProps(n) {
     h = n.chosen
     ai = !n.chosen
-    if(n.mode < 2 && !n.start)
-    !n.mode && !n.chosen ?
-    this.play(randMove()) : ""
+    if(n.mode < 2 && !n.start) {
+      if(n.mode && !n.chosen)
+      this.play(randMove())
+      if(!n.mode && !n.chosen)
+      this.play(4)
+    }
   }
 
   reset() {
@@ -56,7 +59,7 @@ export default class extends Component {
     })
 
     let move
-    if(mode === 0) {
+    if(mode === 1) {
       move = randMove()
       while(cells[move])
       move = randMove()
@@ -79,7 +82,7 @@ export default class extends Component {
         <h4>
           { `${win(cells) ? `Won: ${win(cells)}` :
           (tie(cells) ? "Tied" :
-          (`Turn: ${this.state.nextX ? "X" : "O"}`)) }`  }
+          (`Turn: ${this.state.nextX ? "X" : "O"}`)) }` }
         </h4>
         <button
           className="reset-btn btn"

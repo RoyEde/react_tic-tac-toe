@@ -45,13 +45,13 @@ export default class extends Component {
               value="0"
               className="opt"
             >
-              Machine (Random)
+              Machine (Impossible)
             </option>
             <option
               value="1"
               className="opt"
             >
-              Machine (Impossible)
+              Machine (Random)
             </option>
             <option
               value="2"
