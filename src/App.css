@@ -19,6 +19,17 @@
   justify-content: center;
 }
 
+.btn {
+  border: 1px solid #999;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.5s, height 0.5s, width 0.5s;
+}
+
+.btn:hover, .chosen {
+  background-color: #eee;
+}
+
 .start-title {
   font-size: 4vw;
   margin: 0;
@@ -35,35 +46,31 @@
   padding-right: 2vw;
   padding-top: 0.5vw;
   padding-bottom: 0.5vw;
-  margin-top: 2vw;
-  font-size: 4vw;
+  margin-top: 1.5vw;
+  font-size: 3vw;
 }
 
 .start-btn {
-  font-size: 6vw;
-  height: 7vw;
-  width: 8vw;
-  margin-top: 1vw;
+  font-size: 4.5vw;
+  height: 6.5vw;
+  width: 7.5vw;
+  margin-top: 1.5vw;
   margin-bottom: 1vw;
   margin-left: 3vw;
   margin-right: 3vw;
   padding: auto;
 }
 
-.start-btn, .confirm-btn {
+.reset-btn {
+  margin: 1vw;
+  font-size: 1.5vw;
+  padding: 0.5vw;
+}
+
+.start-btn, .confirm-btn, .reset-btn {
   border-radius: 7px;
 }
 
-.start-btn, .square, .type, .confirm-btn {
-  border: 1px solid #999;
-  background-color: #fff;
-  cursor: pointer;
-  transition: 0.5s;
-}
-
-.start-btn:hover, .square:hover, .type:hover, .confirm-btn:hover {
-  background-color: #eee;
-}
 
 button:focus, select:focus {
   outline: none;
@@ -145,6 +152,14 @@ button:focus, select:focus {
   align-items: center;
 }
 
+.X {
+  color: #ff0000;
+}
+
+.O {
+  color: #0000ff;
+}
+
 @media screen and (max-Width: 768px) {
   .start {
     height: 50vw;
@@ -163,12 +178,17 @@ button:focus, select:focus {
     margin-right: 8vw;
   }
 
-  .square:hover, .type:hover, .start-btn:hover, .confirm-btn:hover {
+  .btn:hover {
     background-color: #fff;
   }
 
   .type {
     font-size: 4vw;
+  }
+
+  .reset-btn {
+    font-size: 3.5vw;
+    padding: 1vw;
   }
 
   .confirm-btn {

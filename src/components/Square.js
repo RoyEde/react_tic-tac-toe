@@ -9,7 +9,7 @@ export default class extends Component {
     return (
       <button
         onClick={() => this.handleClick()}
-        className="square"
+        className={ `square btn ${this.props.value}` }
       >
         { this.props.value }
       </button>

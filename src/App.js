@@ -28,7 +28,15 @@ class App extends Component {
   }
 
   handleChange(v) {
-    this.setState({mode: parseInt(v)})
+    this.setState({mode: parseInt(v, 10)})
+  }
+
+  reset() {
+    this.setState({
+      start: true,
+      mode: 0,
+      chosen: null
+    })
   }
 
   render() {
@@ -42,10 +50,16 @@ class App extends Component {
             chosen={ this.state.chosen }
             mode={ this.state.mode }
            />) :
-           (<Choice chosen={ this.state.chosen }/>)
+           (<Choice
+             chosen={ this.state.chosen }
+             mode={ this.state.mode }
+            />)
         }
         <Board
+          start={ this.state.start }
+          mode={ this.state.mode }
           chosen={ this.state.chosen }
+          reset={ () => this.reset() }
         />
       </Fragment>
     )

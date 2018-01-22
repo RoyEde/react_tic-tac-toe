@@ -9,50 +9,59 @@ export default class extends Component {
   }
 
   handleConfirm() {
-    this.props.chosen === null && this.props.mode !== 0 ?
+    this.props.chosen === null && this.props.mode !== 2 ?
     alert("Please choose!") :
     this.props.handleConfirm()
   }
 
   render() {
     const mode = this.props.mode
+    const chosen = this.props.chosen
     return (
       <div className="overlay">
-        <div className="start">
+        <div className="start appear">
           <p className="start-title">Choose your side!</p>
           <div className="choose">
             <button
               onClick={ () => this.handleClick(true) }
-              className={` start-btn ${mode === 0 ? "appear" : "hide"}-quick`}
+              className={ `X start-btn btn ${mode !== 2 ? "appear" : "hide"}-quick
+              ${chosen !== null ? (chosen ? "chosen" : "") : "" }` }
             >
               X
             </button>
             <button
               onClick={ () => this.handleClick(false) }
-              className={` start-btn ${mode === 0 ? "appear" : "hide"}-quick`}
+              className={ `O start-btn btn ${mode !== 2 ? "appear" : "hide"}-quick
+              ${chosen !== null ? (chosen ? "" : "chosen") : "" }` }
             >
               O
             </button>
           </div>
           <select
-            className="type"
+            className="type btn"
             onChange={ (v) => this.handleChange(v) }
           >
             <option
               value="0"
               className="opt"
-            >1 vs 1</option>
+            >
+              Machine (Random)
+            </option>
             <option
               value="1"
               className="opt"
-            >Machine (Random)</option>
+            >
+              Machine (Impossible)
+            </option>
             <option
               value="2"
               className="opt"
-            >Machine (Impossible)</option>
+            >
+              1 vs 1
+            </option>
           </select>
           <button
-            className="confirm-btn"
+            className="confirm-btn btn"
             onClick={ () => this.handleConfirm() }
           >Confirm</button>
         </div>
