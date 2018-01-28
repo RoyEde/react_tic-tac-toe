@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Square from './Square'
 
 let h
-
 let ai
 
 export default class extends Component {
@@ -10,14 +9,14 @@ export default class extends Component {
     super()
 
     this.state = {
-      cells: Array(9).fill(null),
+      cells: emptyIndexes(Array(9).fill(null)),
       nextX: true
     }
   }
 
   componentWillReceiveProps(n) {
-    h = n.chosen
-    ai = !n.chosen
+    h = n.chosen ? "X" : "O"
+    ai = !n.chosen ? "X" : "O"
     if(n.mode < 2 && !n.start) {
       if(n.mode && !n.chosen)
       this.play(randMove())
@@ -39,8 +38,10 @@ export default class extends Component {
     const state = this.state
     const mode = this.props.mode
     const cells = state.cells.slice()
+    console.log(h);
+    console.log(ai);
 
-    if(win(cells) || cells[v])
+    if(win(cells) || isNaN(cells[v]))
     return
 
     cells[v] = state.nextX ? "X" : "O"
@@ -61,10 +62,12 @@ export default class extends Component {
     let move
     if(mode === 1) {
       move = randMove()
-      while(cells[move])
+      while(isNaN(cells[move]))
       move = randMove()
       cells[move] = !state.nextX ? "X" : "O"
     }
+
+
 
     this.setState({
       cells: cells,
@@ -80,9 +83,9 @@ export default class extends Component {
       <div className="board">
         <h1>Tic-Tac-Toe</h1>
         <h4>
-          { `${win(cells) ? `Won: ${win(cells)}` :
+          { `${win(cells) ? `Won: ${win(cells)/*win2(cells, h)*/}` :
           (tie(cells) ? "Tied" :
-          (`Turn: ${this.state.nextX ? "X" : "O"}`)) }` }
+          (`Turn: ${this.state.nextX ? "X" : "O"}`)) }` /*HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE*/}
         </h4>
         <button
           className="reset-btn btn"
@@ -98,7 +101,7 @@ export default class extends Component {
             {i.map(j => (
               <Square
                 handleClick={ () => this.play(j) }
-                value={ cells[j] }
+                value={ isNaN(cells[j]) ? cells[j] : "" }
                 key={ j }
               />
             ))}
@@ -108,6 +111,27 @@ export default class extends Component {
     )
   }
 }
+
+/* const win2 = (cells, player) => {
+  const wins = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ]
+  for (let i = 0; i < wins.length; i++) {
+    const [a, b, c] = wins[i]
+    console.log(`${a} ${b} ${c}`);
+    if (cells[a] === player && cells[a] === cells[b] && cells[a] === cells[c]) {
+      return cells[a]
+    }
+  }
+  return null
+} */
 
 const win = (cells) => {
   const wins = [
@@ -131,7 +155,7 @@ const win = (cells) => {
 
 const tie = (cells) => {
   for(let i = 0; i < cells.length; i++)
-  if(cells[i] === null)
+  if(!isNaN(cells[i]))
   return false
 
   return true
@@ -143,9 +167,10 @@ const emptyIndexes = (cells) => cells.map((v, i) => v ? v : i).filter(s => !isNa
 
 const minimax = (newBoard, player) => {
   const available = emptyIndexes(newBoard)
-  console.log(available);
+
   if(available.length === 0)
   return 0
+
 
 }
 
