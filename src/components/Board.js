@@ -74,6 +74,47 @@ export default class extends Component {
     })
   }
 
+  play2(v) {
+    const state = this.state
+    const mode = this.props.mode
+    const cells = state.cells.slice()
+
+    if(win2(cells, h) || win2(cells, ai) || isNaN(cells[v]))
+    return
+
+    cells[v] = state.nextX ? "X" : "O"
+
+    if(mode === 2 ||
+      (emptyIndexes(cells).length === 8 && !this.props.chosen)
+    )
+    return this.setState({
+      cells: cells,
+      nextX: !this.state.nextX,
+    })
+
+    if(win2(cells, h) || win2(cells, ai) || tie(cells))
+    return this.setState({
+      cells: cells,
+    })
+
+    let move
+    if(mode === 1) {
+      move = randMove()
+      while(isNaN(cells[move]))
+      move = randMove()
+      cells[move] = !state.nextX ? "X" : "O"
+    }
+
+    if(mode === 0) {
+      move = minimax(cells, ai).index
+      cells[move] = !state.nextX ? "X" : "O"
+    }
+
+    this.setState({
+      cells: cells,
+    })
+  }
+
 
 
   render() {
@@ -100,7 +141,7 @@ export default class extends Component {
           >
             {i.map(j => (
               <Square
-                handleClick={ () => this.play(j) }
+                handleClick={ () => this.play2(j) }
                 value={ isNaN(cells[j]) ? cells[j] : "" }
                 key={ j }
               />
@@ -112,7 +153,7 @@ export default class extends Component {
   }
 }
 
-/* const win2 = (cells, player) => {
+const win2 = (cells, player) => {
   const wins = [
     [0, 1, 2],
     [3, 4, 5],
@@ -125,13 +166,13 @@ export default class extends Component {
   ]
   for (let i = 0; i < wins.length; i++) {
     const [a, b, c] = wins[i]
-    console.log(`${a} ${b} ${c}`);
+    //console.log(`${a} ${b} ${c}`);
     if (cells[a] === player && cells[a] === cells[b] && cells[a] === cells[c]) {
-      return cells[a]
+      return player
     }
   }
-  return null
-} */
+  return false
+}
 
 const win = (cells) => {
   const wins = [
@@ -150,7 +191,7 @@ const win = (cells) => {
       return cells[a]
     }
   }
-  return null
+  return false
 }
 
 const tie = (cells) => {
@@ -165,13 +206,58 @@ const randMove = () => Math.floor((Math.random() * 9))
 
 const emptyIndexes = (cells) => cells.map((v, i) => v ? v : i).filter(s => !isNaN(s))
 
-const minimax = (newBoard, player) => {
-  const available = emptyIndexes(newBoard)
+const minimax = (cells, player) => {
+  const available = emptyIndexes(cells)
+
+  if (win2(cells, h))
+  return {score:-10}
+
+	if (win2(cells, ai))
+  return {score:10}
 
   if(available.length === 0)
-  return 0
+  return {score:0}
 
+  let moves = []
+
+  for(let i = 0; i < available.length; i++) {
+    let move = {}
+    move.index = cells[available[i]]
+    cells[available[i]] = player
+
+    if(player === h) {
+      const g = minimax(cells, h)
+      move.score = g.score
+    }
+
+    if(player === ai) {
+      const g = minimax(cells, ai)
+      move.score = g.score
+    }
+
+    cells[available[i]] = move.index
+    moves.push(move)
+  }
+
+  let bestMove
+  if(player === ai) {
+    let bestScore = -10000
+    for(let i = 0; i < moves.length; i++) {
+      if(moves[i].score > bestScore) {
+        bestScore = moves[i].score
+        bestMove = i
+      }
+    }
+  } else {
+    let bestScore = 10000
+    for(let i = 0; i < moves.length; i++) {
+      if(moves[i].score < bestScore) {
+        bestScore = moves[i].score
+        bestMove = i
+      }
+    }
+  }
+
+  return moves[bestMove]
 
 }
-
-minimax(Array(9).fill(null))
