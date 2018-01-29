@@ -1,22 +1,24 @@
 import React, { Component } from 'react'
 import Square from './Square'
 
-let h
-let ai
-
 export default class extends Component {
   constructor() {
     super()
 
     this.state = {
       cells: emptyIndexes(Array(9).fill(null)),
-      nextX: true
+      nextX: true,
+      human: null,
+      ai: null,
     }
   }
 
   componentWillReceiveProps(n) {
-    h = n.chosen ? "X" : "O"
-    ai = !n.chosen ? "X" : "O"
+    this.setState({
+      human: n.chosen ? "X" : "O",
+      ai: !n.chosen ? "X" : "O",
+    })
+
     if(n.mode < 2 && !n.start) {
       if(n.mode && !n.chosen)
       this.play(randMove())
@@ -33,15 +35,12 @@ export default class extends Component {
     this.props.reset()
   }
 
-
   play(v) {
     const state = this.state
     const mode = this.props.mode
     const cells = state.cells.slice()
-    console.log(h);
-    console.log(ai);
 
-    if(win(cells) || isNaN(cells[v]))
+    if(win(cells, state.human) || win(cells, state.ai) || isNaN(cells[v]))
     return
 
     cells[v] = state.nextX ? "X" : "O"
@@ -54,45 +53,7 @@ export default class extends Component {
       nextX: !this.state.nextX,
     })
 
-    if(win(cells) || tie(cells))
-    return this.setState({
-      cells: cells,
-    })
-
-    let move
-    if(mode === 1) {
-      move = randMove()
-      while(isNaN(cells[move]))
-      move = randMove()
-      cells[move] = !state.nextX ? "X" : "O"
-    }
-
-
-
-    this.setState({
-      cells: cells,
-    })
-  }
-
-  play2(v) {
-    const state = this.state
-    const mode = this.props.mode
-    const cells = state.cells.slice()
-
-    if(win2(cells, h) || win2(cells, ai) || isNaN(cells[v]))
-    return
-
-    cells[v] = state.nextX ? "X" : "O"
-
-    if(mode === 2 ||
-      (emptyIndexes(cells).length === 8 && !this.props.chosen)
-    )
-    return this.setState({
-      cells: cells,
-      nextX: !this.state.nextX,
-    })
-
-    if(win2(cells, h) || win2(cells, ai) || tie(cells))
+    if(win(cells, state.human) || tie(cells))
     return this.setState({
       cells: cells,
     })
@@ -106,7 +67,7 @@ export default class extends Component {
     }
 
     if(mode === 0) {
-      move = minimax(cells, ai).index
+      move = aiPlay(cells, state.ai, state.human)
       cells[move] = !state.nextX ? "X" : "O"
     }
 
@@ -115,19 +76,18 @@ export default class extends Component {
     })
   }
 
-
-
   render() {
     const board = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
     const cells = this.state.cells
+    const player = !this.state.nextX ? "X" : "O"
     return (
       <div className="board">
         <h1>Tic-Tac-Toe</h1>
-        <h4>
-          { `${win(cells) ? `Won: ${win(cells)/*win2(cells, h)*/}` :
+        <h2>
+          { `${win(cells, player) ? `Won: ${win(cells, player)}` :
           (tie(cells) ? "Tied" :
-          (`Turn: ${this.state.nextX ? "X" : "O"}`)) }` /*HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE*/}
-        </h4>
+          (`Turn: ${this.state.nextX ? "X" : "O"}`)) }`}
+        </h2>
         <button
           className="reset-btn btn"
           onClick={ () => this.reset() }
@@ -141,7 +101,7 @@ export default class extends Component {
           >
             {i.map(j => (
               <Square
-                handleClick={ () => this.play2(j) }
+                handleClick={ () => this.play(j) }
                 value={ isNaN(cells[j]) ? cells[j] : "" }
                 key={ j }
               />
@@ -153,42 +113,48 @@ export default class extends Component {
   }
 }
 
-const win2 = (cells, player) => {
-  const wins = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ]
+const wins = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+]
+
+const aiPlay = (cells, ai, human) => {
+  const available = emptyIndexes(cells)
+  const pattern = [4, 0, 8, 2, 6, 1, 5, 7, 3].filter(v => available.indexOf(v) !== -1)
+
+  if(specialMove(cells, ai, available) !== false)
+  return specialMove(cells, ai, available)
+
+  if(specialMove(cells, human, available) !== false)
+  return specialMove(cells, human, available)
+
+  return pattern[0]
+}
+
+const specialMove = (cells, player, available) => {
   for (let i = 0; i < wins.length; i++) {
     const [a, b, c] = wins[i]
-    //console.log(`${a} ${b} ${c}`);
-    if (cells[a] === player && cells[a] === cells[b] && cells[a] === cells[c]) {
-      return player
-    }
+    if (cells[b] === player && cells[b] === cells[c] && available.indexOf(a) !== -1)
+    return a
+    if (cells[c] === player && cells[c] === cells[a] && available.indexOf(b) !== -1)
+    return b
+    if (cells[a] === player && cells[a] === cells[b] && available.indexOf(c) !== -1)
+    return c
   }
   return false
 }
 
-const win = (cells) => {
-  const wins = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ]
+const win = (cells, player) => {
   for (let i = 0; i < wins.length; i++) {
     const [a, b, c] = wins[i]
-    if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
-      return cells[a]
+    if (cells[a] === player && cells[a] === cells[b] && cells[a] === cells[c]) {
+      return player
     }
   }
   return false
@@ -205,59 +171,3 @@ const tie = (cells) => {
 const randMove = () => Math.floor((Math.random() * 9))
 
 const emptyIndexes = (cells) => cells.map((v, i) => v ? v : i).filter(s => !isNaN(s))
-
-const minimax = (cells, player) => {
-  const available = emptyIndexes(cells)
-
-  if (win2(cells, h))
-  return {score:-10}
-
-	if (win2(cells, ai))
-  return {score:10}
-
-  if(available.length === 0)
-  return {score:0}
-
-  let moves = []
-
-  for(let i = 0; i < available.length; i++) {
-    let move = {}
-    move.index = cells[available[i]]
-    cells[available[i]] = player
-
-    if(player === h) {
-      const g = minimax(cells, h)
-      move.score = g.score
-    }
-
-    if(player === ai) {
-      const g = minimax(cells, ai)
-      move.score = g.score
-    }
-
-    cells[available[i]] = move.index
-    moves.push(move)
-  }
-
-  let bestMove
-  if(player === ai) {
-    let bestScore = -10000
-    for(let i = 0; i < moves.length; i++) {
-      if(moves[i].score > bestScore) {
-        bestScore = moves[i].score
-        bestMove = i
-      }
-    }
-  } else {
-    let bestScore = 10000
-    for(let i = 0; i < moves.length; i++) {
-      if(moves[i].score < bestScore) {
-        bestScore = moves[i].score
-        bestMove = i
-      }
-    }
-  }
-
-  return moves[bestMove]
-
-}

@@ -83,7 +83,7 @@ button:focus, select:focus {
 .square {
   height: 12vw;
   width: 12vw;
-  font-size: 6vw;
+  font-size: 5vw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,10 +160,16 @@ button:focus, select:focus {
   color: #0000ff;
 }
 
-@media screen and (max-Width: 768px) {
+@media screen and (max-Width: 1024px) {
+  .square {
+    height: 16vw;
+    width: 16vw;
+    font-size: 6vw;
+  }
+
   .start {
-    height: 50vw;
-    width: 70vw;
+    height: 55vw;
+    width: 80vw;
   }
 
   .start-title {
@@ -171,28 +177,62 @@ button:focus, select:focus {
   }
 
   .start-btn {
-    height: 12.5vw;
-    width: 13.5vw;
-    margin-top: 0;
-    margin-left: 8vw;
-    margin-right: 8vw;
-  }
-
-  .btn:hover {
-    background-color: #fff;
+    font-size: 6vw;
+    height: 10.5vw;
+    width: 12.5vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+    margin-left: 9.5vw;
+    margin-right: 9.5vw;
   }
 
   .type {
-    font-size: 4vw;
+    font-size: 5vw;
   }
 
   .reset-btn {
-    font-size: 3.5vw;
+    font-size: 3vw;
     padding: 1vw;
   }
 
   .confirm-btn {
-    margin-top: 3vw;
+    margin-top: 2vw;
+    font-size: 5vw;
+  }
+}
+
+@media screen and (max-Width: 425px) {
+  .square {
+    height: 25vw;
+    width: 25vw;
+    font-size: 10vw;
+  }
+
+  .start {
+    height: 60vw;
+    width: 90vw;
+  }
+
+  .start-btn {
+    font-size: 10vw;
+    height: 14.5vw;
+    width: 16.5vw;
+    margin-left: 6vw;
+    margin-right: 6vw;
+  }
+
+  .type {
+    font-size: 6vw;
+  }
+
+  .reset-btn {
+    font-size: 6vw;
+    padding: 2vw;
+    margin-bottom: 3vw;
+  }
+
+  .confirm-btn {
+    margin-top: 2vw;
     font-size: 6vw;
   }
 }
