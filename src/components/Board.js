@@ -56,6 +56,7 @@ export default class extends Component {
     if(win(cells, state.human) || tie(cells))
     return this.setState({
       cells: cells,
+      nextX: !state.nextX
     })
 
     let move
