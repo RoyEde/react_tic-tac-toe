@@ -29,7 +29,7 @@ export default class extends Component {
 
   reset() {
     this.setState({
-      cells: Array(9).fill(null),
+      cells: emptyIndexes(Array(9).fill(null)),
       nextX: true
     })
     this.props.reset()
@@ -103,7 +103,12 @@ export default class extends Component {
             {i.map(j => (
               <Square
                 handleClick={ () => this.play(j) }
-                value={ isNaN(cells[j]) ? cells[j] : "" }
+                value={
+                  /*
+                  cells[j]
+                  */
+                  isNaN(cells[j]) ? cells[j] : ""
+                }
                 key={ j }
               />
             ))}
@@ -125,6 +130,16 @@ const wins = [
   [2, 4, 6],
 ]
 
+const loophole = (cells, player, available) => {
+  const holes = [[5, 6, 1]] // list of loopholes and solutions
+
+  for(let i = 0; i < holes.length; i++)
+  if(cells[holes[i][0]] === player && cells[holes[i][1]] === player && available.length === 6 && available.indexOf(holes[i][2] !== -1))
+  return holes[i][2]
+
+  return false
+}
+
 const aiPlay = (cells, ai, human) => {
   const available = emptyIndexes(cells)
   const pattern = [4, 0, 8, 2, 6, 1, 5, 7, 3].filter(v => available.indexOf(v) !== -1)
@@ -134,6 +149,9 @@ const aiPlay = (cells, ai, human) => {
 
   if(specialMove(cells, human, available) !== false)
   return specialMove(cells, human, available)
+
+  if(loophole(cells, human, available)) // check for loopholes in the strategy
+  return loophole(cells, human, available)
 
   return pattern[0]
 }
