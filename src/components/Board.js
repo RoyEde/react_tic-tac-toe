@@ -83,18 +83,23 @@ export default class extends Component {
     const player = !this.state.nextX ? "X" : "O"
     return (
       <div className="board">
-        <h1>Tic-Tac-Toe</h1>
-        <h2>
-          { `${win(cells, player) ? `Won: ${win(cells, player)}` :
-          (tie(cells) ? "Tied" :
-          (`Turn: ${this.state.nextX ? "X" : "O"}`)) }`}
-        </h2>
-        <button
-          className="reset-btn btn"
-          onClick={ () => this.reset() }
-        >
-          Reset
-        </button>
+        <div className="info">
+          <h1>Tic-Tac-Toe</h1>
+          <h4 className={ !this.props.start ? "appear" : "hidden" }>
+            { `Mode: ${this.props.mode === 2 ? "1 vs 1" : this.props.mode === 1 ? "AI-Random" : "AI-Impossible"}` }
+          </h4>
+          <h2>
+            { `${win(cells, player) ? `Won: ${win(cells, player)}` :
+            (tie(cells) ? "Tied" :
+            (`Turn: ${this.state.nextX ? "X" : "O"}`)) }`}
+          </h2>
+          <button
+            className="reset-btn btn"
+            onClick={ () => this.reset() }
+          >
+            Reset
+          </button>
+        </div>
         { board.map(i => (
           <div
             className="row"
@@ -130,16 +135,6 @@ const wins = [
   [2, 4, 6],
 ]
 
-const loophole = (cells, player, available) => {
-  const holes = [[5, 6, 1]] // list of loopholes and solutions
-
-  for(let i = 0; i < holes.length; i++)
-  if(cells[holes[i][0]] === player && cells[holes[i][1]] === player && available.length === 6 && available.indexOf(holes[i][2] !== -1))
-  return holes[i][2]
-
-  return false
-}
-
 const aiPlay = (cells, ai, human) => {
   const available = emptyIndexes(cells)
   const pattern = [4, 0, 8, 2, 6, 1, 5, 7, 3].filter(v => available.indexOf(v) !== -1)
@@ -166,6 +161,16 @@ const specialMove = (cells, player, available) => {
     if (cells[a] === player && cells[a] === cells[b] && available.indexOf(c) !== -1)
     return c
   }
+  return false
+}
+
+const loophole = (cells, player, available) => {
+  const holes = [[5, 6, 1], [2, 6, 1], [0, 8, 7]] // list of loopholes and solutions. This will be updated.
+
+  for(let i = 0; i < holes.length; i++)
+  if(cells[holes[i][0]] === player && cells[holes[i][1]] === player && available.length === 6 && available.indexOf(holes[i][2] !== -1))
+  return holes[i][2]
+
   return false
 }
 
