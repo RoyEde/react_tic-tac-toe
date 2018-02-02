@@ -208,6 +208,12 @@ button:focus, select:focus {
   }
 }
 
+@media screen and (max-Width: 768px) {
+  .btn:not(.chosen):hover, select:hover {
+    background-color: #fff;
+  }
+}
+
 @media screen and (max-Width: 425px) {
   .square {
     height: 25vw;
