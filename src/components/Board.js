@@ -165,7 +165,7 @@ const specialMove = (cells, player, available) => {
 }
 
 const loophole = (cells, player, available) => {
-  const holes = [[5, 6, 1], [2, 6, 1], [0, 8, 7]] // list of loopholes and solutions. This will be updated.
+  const holes = [[5, 6, 1], [2, 6, 1], [0, 8, 7], [5, 7, 2]] // list of loopholes and solutions. This will be updated.
 
   for(let i = 0; i < holes.length; i++)
   if(cells[holes[i][0]] === player && cells[holes[i][1]] === player && available.length === 6 && available.indexOf(holes[i][2] !== -1))
