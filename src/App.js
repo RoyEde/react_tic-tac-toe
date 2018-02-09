@@ -34,7 +34,6 @@ class App extends Component {
   reset() {
     this.setState({
       start: true,
-      mode: 0,
       chosen: null
     })
   }

@@ -39,6 +39,7 @@ export default class extends Component {
           </div>
           <select
             className="type btn"
+            value={ mode }
             onChange={ (v) => this.handleChange(v) }
           >
             <option
