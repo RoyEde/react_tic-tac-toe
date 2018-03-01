@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
 
 export default class extends Component {
-  handleClick() {
+  handleClick () {
     this.props.handleClick()
   }
 
-  render() {
+  render () {
+    const value = this.props.value
     return (
       <button
         onClick={() => this.handleClick()}
-        className={ `square btn ${this.props.value}` }
+        className={`square btn ${value}`}
       >
-        { this.props.value }
+        <span className={`${value ? 'appear-quick' : 'hidden'}`}>{ value }</span>
       </button>
     )
   }
