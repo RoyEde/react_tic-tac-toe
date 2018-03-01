@@ -5,7 +5,7 @@ import Board from './components/Board'
 import './App.css'
 
 class App extends Component {
-  constructor() {
+  constructor () {
     super()
 
     this.state = {
@@ -15,54 +15,54 @@ class App extends Component {
     }
   }
 
-  handleChoice(v) {
+  handleChoice (v) {
     this.setState({
       chosen: v
     })
   }
 
-  handleConfirm() {
+  handleConfirm () {
     this.setState({
-      start: false,
+      start: false
     })
   }
 
-  handleChange(v) {
+  handleChange (v) {
     this.setState({mode: parseInt(v, 10)})
   }
 
-  reset() {
+  reset () {
     this.setState({
       start: true,
       chosen: null
     })
   }
 
-  render() {
+  render () {
     return (
       <Fragment>
-        { this.state.start ?
-          (<Start
-            handleChoice={ (v) => this.handleChoice(v) }
-            handleChange={ (v) => this.handleChange(v) }
-            handleConfirm={ () => this.handleConfirm() }
-            chosen={ this.state.chosen }
-            mode={ this.state.mode }
-           />) :
-           (<Choice
-             chosen={ this.state.chosen }
-             mode={ this.state.mode }
-            />)
+        { this.state.start
+          ? (<Start
+            handleChoice={(v) => this.handleChoice(v)}
+            handleChange={(v) => this.handleChange(v)}
+            handleConfirm={() => this.handleConfirm()}
+            chosen={this.state.chosen}
+            mode={this.state.mode}
+             />)
+          : (<Choice
+            chosen={this.state.chosen}
+            mode={this.state.mode}
+             />)
         }
         <Board
-          start={ this.state.start }
-          mode={ this.state.mode }
-          chosen={ this.state.chosen }
-          reset={ () => this.reset() }
+          start={this.state.start}
+          mode={this.state.mode}
+          chosen={this.state.chosen}
+          reset={() => this.reset()}
         />
       </Fragment>
     )
   }
 }
 
-export default App;
+export default App
