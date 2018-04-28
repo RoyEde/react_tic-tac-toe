@@ -42,17 +42,21 @@ class App extends Component {
     return (
       <Fragment>
         { this.state.start
-          ? (<Start
-            handleChoice={(v) => this.handleChoice(v)}
-            handleChange={(v) => this.handleChange(v)}
-            handleConfirm={() => this.handleConfirm()}
-            chosen={this.state.chosen}
-            mode={this.state.mode}
-             />)
-          : (<Choice
-            chosen={this.state.chosen}
-            mode={this.state.mode}
-             />)
+          ? (
+            <Start
+              handleChoice={(v) => this.handleChoice(v)}
+              handleChange={(v) => this.handleChange(v)}
+              handleConfirm={() => this.handleConfirm()}
+              chosen={this.state.chosen}
+              mode={this.state.mode}
+            />
+          )
+          : (
+            <Choice
+              chosen={this.state.chosen}
+              mode={this.state.mode}
+            />
+          )
         }
         <Board
           start={this.state.start}
