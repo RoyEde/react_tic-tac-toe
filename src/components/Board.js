@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Square from './Square'
-import { aiPlay, emptyIndexes, randMove, tie, win } from '../Logic'
+import { aiPlay, emptyIndexes, randMove, tie, win } from '../logic'
 
 export default class extends Component {
   constructor () {
