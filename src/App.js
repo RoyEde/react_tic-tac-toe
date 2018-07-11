@@ -50,8 +50,7 @@ class App extends Component {
               chosen={this.state.chosen}
               mode={this.state.mode}
             />
-          )
-          : (
+          ) : (
             <Choice
               chosen={this.state.chosen}
               mode={this.state.mode}

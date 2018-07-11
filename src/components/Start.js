@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+
 export default class extends Component {
   handleClick (v) {
     this.props.handleChoice(v)
