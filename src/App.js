@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import Start from './components/Start'
-import Choice from './components/Choice'
-import Board from './components/Board'
+import Start from './components/app/StartCard/'
+import Choice from './components/app/ChosenCard'
+import Board from './components/app/Board'
 import './App.css'
 
 class App extends Component {
